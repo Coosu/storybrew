@@ -303,8 +303,10 @@ namespace StorybrewEditor.UserInterface.Components
         {
             var editorPath = Path.GetDirectoryName(Path.GetFullPath("."));
 
-            var root = Path.GetPathRoot(effect.Path);
-            var solutionFolder = Path.GetDirectoryName(effect.Path);
+            string solutionFile = null;
+            var effectPath = effect.Path;
+            var root = Path.GetPathRoot(effectPath);
+            var solutionFolder = Path.GetDirectoryName(effectPath);
             while (solutionFolder != root)
             {
                 if (solutionFolder == editorPath)
@@ -314,6 +316,7 @@ namespace StorybrewEditor.UserInterface.Components
                 foreach (var file in Directory.GetFiles(solutionFolder, "*.sln"))
                 {
                     isSolution = true;
+                    solutionFile = file;
                     break;
                 }
                 if (isSolution)
@@ -323,19 +326,35 @@ namespace StorybrewEditor.UserInterface.Components
             }
 
             if (solutionFolder == root)
-                solutionFolder = Path.GetDirectoryName(effect.Path);
+                solutionFolder = Path.GetDirectoryName(effectPath);
 
+            if (Program.Settings.UseVsStudio)
+                ExecuteVsStudio(solutionFolder, solutionFile, effectPath);
+            else
+                ExecuteVsCode(solutionFolder, effectPath);
+
+        }
+
+        private static Process vsProc; //temporary static field; idk how to manage singleton
+        private void ExecuteVsStudio(string solutionFolder, string solutionFile, string effectPath)
+        {
+        }
+
+        private void ExecuteVsCode(string solutionFolder, string effectPath)
+        {
             var paths = new List<string>()
             {
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Microsoft VS Code", "bin", "code"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Microsoft VS Code", "bin", "code"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Microsoft VS Code", "bin",
+                    "code"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Microsoft VS Code", "bin",
+                    "code"),
             };
             foreach (var path in Environment.GetEnvironmentVariable("path").Split(';'))
                 if (PathHelper.IsValidPath(path))
                     paths.Add(Path.Combine(path, "code"));
                 else Trace.WriteLine($"Invalid path in environment variables: {path}");
 
-            var arguments = $"\"{solutionFolder}\" \"{effect.Path}\" -r";
+            var arguments = $"\"{solutionFolder}\" \"{effectPath}\" -r";
             if (Program.Settings.VerboseVsCode)
                 arguments += " --verbose";
 
@@ -363,8 +382,10 @@ namespace StorybrewEditor.UserInterface.Components
                     Trace.WriteLine($"Could not open vscode:\n{e}");
                 }
             }
-            Manager.ScreenLayerManager.ShowMessage($"Visual Studio Code could not be found, do you want to install it?\n(You may have to restart after installing)",
-                    () => Process.Start("https://code.visualstudio.com/"), true);
+
+            Manager.ScreenLayerManager.ShowMessage(
+                $"Visual Studio Code could not be found, do you want to install it?\n(You may have to restart after installing)",
+                () => Process.Start("https://code.visualstudio.com/"), true);
         }
 
         private static string getEffectDetails(Effect effect)

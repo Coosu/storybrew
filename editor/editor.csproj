@@ -87,6 +87,7 @@
     <Compile Include="Mapset\EditorBeatmap.cs" />
     <Compile Include="Mapset\MapsetManager.cs" />
     <Compile Include="Editor.cs" />
+    <Compile Include="Processes\ProcessDevenv.cs" />
     <Compile Include="Processes\RemoteProcessWorkerContainer.cs" />
     <Compile Include="Processes\RemoteProcessWorker.cs" />
     <Compile Include="Scripting\ScriptContainer.cs" />

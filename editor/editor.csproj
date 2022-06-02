@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net472</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
-   <Version>1.80.7960-modified.2</Version>
+   <Version>1.81.8165-modified.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>

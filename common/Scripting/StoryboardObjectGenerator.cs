@@ -85,7 +85,7 @@ namespace StorybrewCommon.Scripting
             if (!bitmaps.TryGetValue(path, out Bitmap bitmap))
             {
                 if (watch) context.AddDependency(path);
-                
+
                 if (alternatePath != null && !File.Exists(path))
                 {
                     alternatePath = Path.GetFullPath(alternatePath);
@@ -151,28 +151,32 @@ namespace StorybrewCommon.Scripting
         /// Returns the Fast Fourier Transform of the song at a certain time, with the default amount of magnitudes.
         /// Useful to make spectrum effets.
         /// </summary>
-        public float[] GetFft(double time, string path = null)
+        public float[] GetFft(double time, string path = null, bool splitChannels = false)
         {
             if (path != null) AddDependency(path);
-            return context.GetFft(time, path);
+            return context.GetFft(time, path, splitChannels);
         }
 
         /// <summary>
         /// Returns the Fast Fourier Transform of the song at a certain time, with the specified amount of magnitudes.
         /// Useful to make spectrum effets.
         /// </summary>
-        public float[] GetFft(double time, int magnitudes, string path = null, OsbEasing easing = OsbEasing.None)
+        public float[] GetFft(double time, int magnitudes, string path = null, OsbEasing easing = OsbEasing.None, float frequencyCutOff = 0)
         {
             var fft = GetFft(time, path);
             if (magnitudes == fft.Length && easing == OsbEasing.None)
                 return fft;
+
+            var usedFftLength = frequencyCutOff > 0 ?
+                (int)Math.Floor(frequencyCutOff / (context.GetFftFrequency(path) / 2.0) * fft.Length) :
+                fft.Length;
 
             var resultFft = new float[magnitudes];
             var baseIndex = 0;
             for (var i = 0; i < magnitudes; i++)
             {
                 var progress = EasingFunctions.Ease(easing, (double)i / magnitudes);
-                var index = Math.Min(Math.Max(baseIndex + 1, (int)(progress * fft.Length)), fft.Length - 1);
+                var index = Math.Min(Math.Max(baseIndex + 1, (int)(progress * usedFftLength)), usedFftLength - 1);
 
                 var value = 0f;
                 for (var v = baseIndex; v < index; v++)

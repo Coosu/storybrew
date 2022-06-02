@@ -54,9 +54,12 @@ namespace StorybrewScripts
         [Configurable]
         public OsbEasing FftEasing = OsbEasing.InExpo;
 
+        [Configurable]
+        public int FrequencyCutOff = 16000;
+
         public override void Generate()
         {
-            if (StartTime == EndTime)
+            if (StartTime == EndTime && Beatmap.HitObjects.FirstOrDefault() != null)
             {
                 StartTime = (int)Beatmap.HitObjects.First().StartTime;
                 EndTime = (int)Beatmap.HitObjects.Last().EndTime;
@@ -74,7 +77,7 @@ namespace StorybrewScripts
             var fftOffset = fftTimeStep * 0.2;
             for (var time = (double)StartTime; time < EndTime; time += fftTimeStep)
             {
-                var fft = GetFft(time + fftOffset, BarCount, null, FftEasing);
+                var fft = GetFft(time + fftOffset, BarCount, null, FftEasing, FrequencyCutOff);
                 for (var i = 0; i < BarCount; i++)
                 {
                     var height = Radius + (float)Math.Log10(1 + fft[i] * LogScale) * Scale;

@@ -124,23 +124,24 @@ namespace StorybrewEditor.Scripting
                 var failures = result.Diagnostics.Where(diagnostic =>
                         diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error)
                     .ToList();
-                var failureGroup = failures.GroupBy(k =>
+                failures.Reverse();
+                var failureGroup = failures
+                    .GroupBy(k =>
                     {
                         if (k.Location.SourceTree == null) return "";
                         if (trees.TryGetValue(k.Location.SourceTree, out var path)) return path;
                         return "";
                     })
                     .ToDictionary(k => k.Key, k => k.ToList());
-                failures.Reverse();
                 var message = new StringBuilder("Compilation error\n\n");
                 foreach (var kvp in failureGroup)
                 {
                     var file = kvp.Key;
                     var diagnostics = kvp.Value;
-                    message.AppendLine($"{file}:");
+                    message.AppendLine($"{Path.GetFileName(file)}:");
                     foreach (var diagnostic in diagnostics)
                     {
-                        message.AppendLine($"  {diagnostic}");
+                        message.AppendLine($"--{diagnostic}");
                     }
                 }
 

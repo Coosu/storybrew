@@ -6,6 +6,7 @@
     <Configurations>Output</Configurations>
     <RootNamespace>storyboard</RootNamespace>
     <AssemblyName>storyboard</AssemblyName>
+    <LangVersion>10.0</LangVersion>
     <Platforms>x86</Platforms>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>

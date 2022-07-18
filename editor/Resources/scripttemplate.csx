@@ -12,14 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StorybrewScripts
+namespace StorybrewScripts;
+
+public class %CLASSNAME% : StoryboardObjectGenerator
 {
-    public class %CLASSNAME% : StoryboardObjectGenerator
+    public override void Generate()
     {
-        public override void Generate()
-        {
-		    
-            
-        }
+        
     }
 }

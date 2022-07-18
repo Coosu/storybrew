@@ -1,0 +1,1 @@
+﻿dotnet publish --runtime win7-x86 --configuration Release

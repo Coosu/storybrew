@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CSharp;
 
@@ -47,17 +48,19 @@ namespace StorybrewEditor.Scripting
 
         private void compile(string[] sourcePaths, string outputPath, bool useRoslyn, IEnumerable<string> referencedAssemblies)
         {
-            var trees = new Dictionary<SyntaxTree, string>();
+            var symbolPath = Path.ChangeExtension(outputPath, "pdb");
+            var trees = new Dictionary<SyntaxTree, KeyValuePair<string, SourceText>>();
             foreach (var sourcePath in sourcePaths)
             {
-                var sourceCode = File.ReadAllText(sourcePath);
+                using (var sourceStream = File.OpenRead(sourcePath))
+                {
+                    var sourceText = SourceText.From(sourceStream, canBeEmbedded: true);
+                    var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Latest);
 
-                var sourceText = SourceText.From(sourceCode);
-                var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Latest);
+                    var syntaxTree = SyntaxFactory.ParseSyntaxTree(sourceText, parseOptions);
 
-                var syntaxTree = SyntaxFactory.ParseSyntaxTree(sourceText, parseOptions);
-
-                trees.Add(syntaxTree, sourcePath);
+                    trees.Add(syntaxTree, new KeyValuePair<string, SourceText>(sourcePath, sourceText));
+                }
             }
 
             var references = new List<MetadataReference>
@@ -106,16 +109,32 @@ namespace StorybrewEditor.Scripting
                 }
             }
 
-            var compilation = CSharpCompilation.Create(Path.GetFileName(outputPath),
+            var compilation = CSharpCompilation.Create(
+                Path.GetFileName(outputPath),
                 trees.Keys,
                 references: references,
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
-                    optimizationLevel: OptimizationLevel.Release,
-                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                    .WithPlatform(Platform.AnyCpu)
+                    .WithOptimizationLevel(OptimizationLevel.Debug)
+                    .WithAssemblyIdentityComparer(DesktopAssemblyIdentityComparer.Default)
+            );
 
-            using (var fs = File.Create(outputPath))
+            using (var assemblyStream = File.Create(outputPath))
+            using (var symbolsStream = File.Create(symbolPath))
             {
-                var result = compilation.Emit(fs);
+                var emitOptions = new EmitOptions(
+                    debugInformationFormat: DebugInformationFormat.PortablePdb,
+                    pdbFilePath: symbolPath);
+
+                var embeddedTexts = trees.Values.Select(k => EmbeddedText.FromSource(k.Key, k.Value)).ToList();
+
+                var result = compilation.Emit(
+                    peStream: assemblyStream,
+                    pdbStream: symbolsStream,
+                    embeddedTexts: embeddedTexts,
+                    options: emitOptions
+                );
+
                 if (result.Success)
                 {
                     return;
@@ -129,7 +148,7 @@ namespace StorybrewEditor.Scripting
                     .GroupBy(k =>
                     {
                         if (k.Location.SourceTree == null) return "";
-                        if (trees.TryGetValue(k.Location.SourceTree, out var path)) return path;
+                        if (trees.TryGetValue(k.Location.SourceTree, out var path)) return path.Key;
                         return "";
                     })
                     .ToDictionary(k => k.Key, k => k.ToList());

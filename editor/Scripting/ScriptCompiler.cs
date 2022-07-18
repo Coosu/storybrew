@@ -1,15 +1,13 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.CSharp;
 
 namespace StorybrewEditor.Scripting
 {
@@ -17,6 +15,7 @@ namespace StorybrewEditor.Scripting
     {
         private static readonly string[] environmentDirectories =
         {
+            Path.Combine(Path.GetDirectoryName(typeof(object).Assembly.Location), "WPF"),
             Path.GetDirectoryName(typeof(object).Assembly.Location),
             Environment.CurrentDirectory,
         };

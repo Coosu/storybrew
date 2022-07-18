@@ -1,8 +1,10 @@
 ## What's new in this fork version
-1. Use new Roysln compiler and support C# 10
-2. Update to net472
-3. Integrate Coosu library
-4. Change project templates to SDK style for Visual Stutio compatibility
+
+1. Use new roslyn compiler and support C# 10
+2. Support debugging with .pdb, which means you can get detailed trace info.
+3. Update to net472
+4. Integrate Coosu library
+5. Change project templates to SDK style for Visual Stutio compatibility
 
 
 ## Upstream description

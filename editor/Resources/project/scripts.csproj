@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net472</TargetFramework>
     <Configurations>Output</Configurations>
-    <RootNamespace>storyboard</RootNamespace>
+    <RootNamespace>StorybrewScripts</RootNamespace>
     <AssemblyName>storyboard</AssemblyName>
     <LangVersion>10.0</LangVersion>
     <Platforms>x86</Platforms>

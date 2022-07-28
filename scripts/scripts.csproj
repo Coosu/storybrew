@@ -5,7 +5,7 @@
     <RootNamespace>StorybrewScripts</RootNamespace>
     <AssemblyName>StorybrewScripts</AssemblyName>
     <UseWindowsForms>true</UseWindowsForms>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <PackageId>storybrew scripts</PackageId>
     <Authors>storybrew scripts</Authors>
     <Company>storybrew scripts</Company>
@@ -17,5 +17,5 @@
   <ItemGroup>
     <ProjectReference Include="..\common\common.csproj" />
   </ItemGroup>
- 
+
 </Project>

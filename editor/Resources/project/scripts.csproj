@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <UseWpf>true</UseWpf>
     <Configurations>Output</Configurations>
     <RootNamespace>StorybrewScripts</RootNamespace>

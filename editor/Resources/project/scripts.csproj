@@ -10,6 +10,7 @@
     <LangVersion>10.0</LangVersion>
     <Platforms>x86</Platforms>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Output|x86' ">
@@ -17,7 +18,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <BaseOutputPath>..\..\cache\bin</BaseOutputPath>
     <BaseIntermediateOutputPath>..\..\cache\obj\</BaseIntermediateOutputPath>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>

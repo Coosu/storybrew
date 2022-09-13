@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
-    <Version>1.82-coosu.1</Version>
+    <Version>1.83-coosu.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>

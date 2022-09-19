@@ -4,7 +4,9 @@ using StorybrewEditor.Util;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Tiny;
 using Tiny.Formats.Json;
 
@@ -89,6 +91,19 @@ namespace StorybrewEditor.ScreenLayers
                 },
             });
 
+            var text = new StringBuilder($"{Program.Name} {ReflectionUtil.GetVersionInfo()}");
+            var file = new FileInfo("Coosu.Storyboard.Storybrew.dll");
+            if (file.Exists)
+            {
+                var fvi = FileVersionInfo.GetVersionInfo(file.FullName);
+                text.Append($" (Coosu {fvi.ProductVersion})");
+            }
+            else
+            {
+                text.Append($" (Coosu MISSING)");
+            }
+
+            text.Append("\r\nCoosu/storybrew (forked from Damnae/storybrew)");
             WidgetManager.Root.Add(bottomLayout = new LinearLayout(WidgetManager)
             {
                 AnchorTarget = WidgetManager.Root,
@@ -107,7 +122,7 @@ namespace StorybrewEditor.ScreenLayers
                     versionLabel = new Label(WidgetManager)
                     {
                         StyleName = "small",
-                        Text =$"{Program.Name} {ReflectionUtil.GetVersionInfo()} (Coosu integrated) \r\nCoosu/storybrew (forked from Damnae/storybrew)",
+                        Text = text.ToString(),
                         AnchorFrom = BoxAlignment.Centre,
                     },
                 },

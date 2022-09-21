@@ -7,6 +7,8 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,7 +18,13 @@ using BrewLib.Util;
 using Microsoft.Win32;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Common.Input;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using StorybrewEditor.Util;
+using Image = OpenTK.Windowing.GraphicsLibraryFramework.Image;
 
 namespace StorybrewEditor
 {
@@ -81,24 +89,30 @@ namespace StorybrewEditor
             Settings = new Settings();
             Updater.NotifyEditorRun();
 
-            var displayDevice = findDisplayDevice();
-
-            using (var window = createWindow(displayDevice))
+            using (var window = createWindow())
             using (AudioManager = createAudioManager(window))
             using (var editor = new Editor(window))
             {
-                Trace.WriteLine($"{getOSVersion()} / {window.WindowInfo}");
-                Trace.WriteLine($"graphics mode: {window.Context.GraphicsMode}");
+                Trace.WriteLine($"{getOSVersion()}");
+                Trace.WriteLine($"graphics mode: {window.Context}");
 
-                window.Icon = new Icon(typeof(Program), "icon.ico");
-                window.Resize += (sender, e) =>
+                using var stream = typeof(Program).Module.Assembly.GetManifestResourceStream(typeof(Program), "icon.ico");
+                var img = System.Drawing.Image.FromStream(stream) as Bitmap;
+                var data = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                var size = img.Width * img.Height * 4;
+                byte[] managedArray = new byte[size];
+                Marshal.Copy(data.Scan0, managedArray, 0, size);
+                window.Icon = new WindowIcon(new OpenTK.Windowing.Common.Input.Image(img.Width, img.Height, managedArray));
+                img.UnlockBits(data);
+
+                window.Resize += (e) =>
                 {
                     editor.Draw(1);
                     window.SwapBuffers();
                 };
 
                 editor.Initialize();
-                runMainLoop(window, editor, 1.0 / Settings.UpdateRate, 1.0 / (Settings.FrameRate > 0 ? Settings.FrameRate : displayDevice.RefreshRate));
+                runMainLoop(window, editor, 1.0 / Settings.UpdateRate, 1.0 / (Settings.FrameRate > 0 ? Settings.FrameRate : 0));
 
                 Settings.Save();
             }
@@ -115,39 +129,12 @@ namespace StorybrewEditor
             return Environment.OSVersion.ToString();
         }
 
-        private static DisplayDevice findDisplayDevice()
+        private static GameWindow createWindow()
         {
-            try
-            {
-                // Can throw ArgumentOutOfRangeException with OpenTK.Platform.SDL2
-                return DisplayDevice.GetDisplay(DisplayIndex.Default);
-            }
-            catch (Exception e1)
-            {
-                Trace.WriteLine($"Failed to use the default display device: {e1}");
-
-                var deviceIndex = 0;
-                while (deviceIndex <= (int)DisplayIndex.Sixth)
-                    try
-                    {
-                        return DisplayDevice.GetDisplay((DisplayIndex)deviceIndex);
-                    }
-                    catch (Exception e2)
-                    {
-                        Trace.WriteLine($"Failed to use display device #{deviceIndex}: {e2}");
-                        deviceIndex++;
-                    }
-            }
-            throw new InvalidOperationException("Failed to find a display device");
-        }
-
-        private static GameWindow createWindow(DisplayDevice displayDevice)
-        {
-            var graphicsMode = new GraphicsMode(new ColorFormat(32), 24, 8, 0, ColorFormat.Empty, 2, false);
 #if DEBUG
-            var contextFlags = GraphicsContextFlags.Debug | GraphicsContextFlags.ForwardCompatible;
+            var contextFlags = ContextFlags.Debug | ContextFlags.Default;
 #else
-            var contextFlags = GraphicsContextFlags.ForwardCompatible;
+            var contextFlags = ContextFlags.Defaulte;
 #endif
             var primaryScreenArea = Screen.PrimaryScreen.WorkingArea;
 
@@ -158,17 +145,28 @@ namespace StorybrewEditor
                 windowHeight = 600;
                 if (windowWidth >= primaryScreenArea.Width) windowWidth = 800;
             }
-            var window = new GameWindow(windowWidth, windowHeight, graphicsMode, Name, GameWindowFlags.Default, displayDevice, 2, 0, contextFlags);
-            Trace.WriteLine($"Window dpi scale: {window.Height / (float)windowHeight}");
+            var window = new GameWindow(new GameWindowSettings()
+            {
 
-            window.Location = new Point(
-                (int)(primaryScreenArea.Left + (primaryScreenArea.Width - window.Size.Width) * 0.5f),
-                (int)(primaryScreenArea.Top + (primaryScreenArea.Height - window.Size.Height) * 0.5f)
+
+            }, new NativeWindowSettings()
+            {
+                Size = new(windowWidth, windowHeight),
+                Title = Name,
+                Profile = ContextProfile.Compatability,
+                Flags = contextFlags,
+                WindowState = WindowState.Normal,
+            });
+            Trace.WriteLine($"Window dpi scale: {window.Size.Y / (float)windowHeight}");
+
+            window.Location = new Vector2i(
+                (int)(primaryScreenArea.Left + (primaryScreenArea.Width - window.Size.X) * 0.5f),
+                (int)(primaryScreenArea.Top + (primaryScreenArea.Height - window.Size.Y) * 0.5f)
             );
             if (window.Location.X < 0 || window.Location.Y < 0)
             {
-                window.Location = primaryScreenArea.Location;
-                window.Size = primaryScreenArea.Size;
+                window.Location = new(primaryScreenArea.Location.X, primaryScreenArea.Location.Y);
+                window.Size = new(primaryScreenArea.Size.Width, primaryScreenArea.Size.Height);
                 window.WindowState = WindowState.Maximized;
             }
 
@@ -200,7 +198,7 @@ namespace StorybrewEditor
             watch.Start();
             while (window.Exists && !window.IsExiting)
             {
-                var focused = window.Focused;
+                var focused = window.IsFocused;
                 var currentTime = watch.Elapsed.TotalSeconds;
                 var fixedUpdates = 0;
 
@@ -229,7 +227,7 @@ namespace StorybrewEditor
 
                 if (!windowDisplayed)
                 {
-                    window.Visible = true;
+                    window.IsVisible = true;
                     windowDisplayed = true;
                 }
 

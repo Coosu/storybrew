@@ -103,6 +103,7 @@ namespace StorybrewEditor
 
             Process.Start(new ProcessStartInfo(executablePath, $"update \"{updateTestPath}\" {previousVersion}")
             {
+                UseShellExecute = true,
                 WorkingDirectory = updateFolderPath,
             });
         }

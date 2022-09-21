@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWpf>true</UseWpf>
     <Configurations>Output</Configurations>
     <RootNamespace>StorybrewScripts</RootNamespace>
@@ -34,8 +34,8 @@
     <Reference Include="StorybrewCommon">
       <HintPath>..\..\StorybrewCommon.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
+    <!--<Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />-->
   </ItemGroup>
 
 </Project>

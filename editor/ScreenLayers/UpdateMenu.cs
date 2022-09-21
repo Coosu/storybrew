@@ -110,6 +110,7 @@ namespace StorybrewEditor.ScreenLayers
                         {
                             StartInfo = new ProcessStartInfo(executablePath, $"update \"{localPath}\" {Program.Version}")
                             {
+                                UseShellExecute = true,
                                 WorkingDirectory = Updater.UpdateFolderPath,
                             },
                         };

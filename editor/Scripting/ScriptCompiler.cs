@@ -19,30 +19,32 @@ namespace StorybrewEditor.Scripting
             Path.GetDirectoryName(typeof(object).Assembly.Location),
             Environment.CurrentDirectory,
         };
-        private static int nextId;
+        //private static int nextId;
 
         public static void Compile(string[] sourcePaths, string outputPath, IEnumerable<string> referencedAssemblies)
         {
-            var setup = new AppDomainSetup()
-            {
-                ApplicationName = $"ScriptCompiler {nextId++}",
-                ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-            };
+            var compiler = new ScriptCompiler();
+            compiler.compile(sourcePaths, outputPath, Program.Settings.UseRoslyn, referencedAssemblies);
+            //var setup = new AppDomainSetup()
+            //{
+            //    ApplicationName = $"ScriptCompiler {nextId++}",
+            //    ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+            //};
 
-            Debug.Print($"{nameof(Scripting)}: Compiling {string.Join(", ", sourcePaths)}");
-            var compilerDomain = AppDomain.CreateDomain(setup.ApplicationName, null, setup);
-            try
-            {
-                var compiler = (ScriptCompiler)compilerDomain.CreateInstanceFromAndUnwrap(
-                    typeof(ScriptCompiler).Assembly.ManifestModule.FullyQualifiedName,
-                    typeof(ScriptCompiler).FullName);
+            //Debug.Print($"{nameof(Scripting)}: Compiling {string.Join(", ", sourcePaths)}");
+            //var compilerDomain = AppDomain.CreateDomain(setup.ApplicationName, null, setup);
+            //try
+            //{
+            //    var compiler = (ScriptCompiler)compilerDomain.CreateInstanceFromAndUnwrap(
+            //        typeof(ScriptCompiler).Assembly.ManifestModule.FullyQualifiedName,
+            //        typeof(ScriptCompiler).FullName);
 
-                compiler.compile(sourcePaths, outputPath, Program.Settings.UseRoslyn, referencedAssemblies);
-            }
-            finally
-            {
-                AppDomain.Unload(compilerDomain);
-            }
+            //    compiler.compile(sourcePaths, outputPath, Program.Settings.UseRoslyn, referencedAssemblies);
+            //}
+            //finally
+            //{
+            //    AppDomain.Unload(compilerDomain);
+            //}
         }
 
         private void compile(string[] sourcePaths, string outputPath, bool useRoslyn, IEnumerable<string> referencedAssemblies)
@@ -62,11 +64,17 @@ namespace StorybrewEditor.Scripting
                 }
             }
 
+            var assemblyLocation = typeof(object).Assembly.Location;
             var references = new List<MetadataReference>
             {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+                MetadataReference.CreateFromFile(assemblyLocation)
             };
-
+            if (assemblyLocation.Contains("NETCore"))
+            {
+                var dir = Path.GetDirectoryName(assemblyLocation);
+                references.Add(MetadataReference.CreateFromFile(Path.Combine(dir, "System.Runtime.dll")));
+            }
+            
             foreach (var referencedAssembly in referencedAssemblies)
             {
                 string asmPath = referencedAssembly;
@@ -86,6 +94,27 @@ namespace StorybrewEditor.Scripting
                             isExist = true;
                             asmPath = actualAsmPath;
                             break;
+                        }
+
+                        if (!isExist)
+                        {
+                            var location = Path.GetDirectoryName(assemblyLocation);
+                            var version = Path.GetFileName(location);
+                            var dirParent = new DirectoryInfo(location).Parent;
+                            if (dirParent.Name.Contains("NETCore"))
+                            {
+                                var enumerateDirectories = dirParent.Parent.EnumerateDirectories("*WindowsDesktop*");
+                                var windowsDesktop = enumerateDirectories.FirstOrDefault()?.FullName;
+                                if (windowsDesktop != null)
+                                {
+                                    var actualAsmPath = Path.Combine(windowsDesktop, version, referencedAssembly);
+                                    if (File.Exists(actualAsmPath))
+                                    {
+                                        isExist = true;
+                                        asmPath = actualAsmPath;
+                                    }
+                                }
+                            }
                         }
 
                         if (isExist)

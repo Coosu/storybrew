@@ -1,12 +1,4 @@
-﻿using BrewLib.Audio;
-using BrewLib.Graphics;
-using BrewLib.Util;
-using Microsoft.Win32;
-using OpenTK;
-using OpenTK.Graphics;
-using StorybrewEditor.Processes;
-using StorybrewEditor.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -18,6 +10,13 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrewLib.Audio;
+using BrewLib.Graphics;
+using BrewLib.Util;
+using Microsoft.Win32;
+using OpenTK;
+using OpenTK.Graphics;
+using StorybrewEditor.Util;
 
 namespace StorybrewEditor
 {
@@ -50,7 +49,7 @@ namespace StorybrewEditor
             if (args.Length != 0 && handleArguments(args))
                 return;
 
-            setupLogging(checkFrozen : false);
+            setupLogging(checkFrozen: false);
             startEditor();
         }
 
@@ -66,12 +65,6 @@ namespace StorybrewEditor
                 case "build":
                     setupLogging(null, "build.log");
                     Builder.Build();
-                    return true;
-                case "worker":
-                    if (args.Length < 2) return false;
-                    setupLogging(null, $"worker-{DateTime.UtcNow:yyyyMMddHHmmssfff}.log");
-                    enableScheduling();
-                    ProcessWorker.Run(args[1]);
                     return true;
             }
             return false;
@@ -426,7 +419,7 @@ namespace StorybrewEditor
                     if (show)
                     {
                         var result = MessageBox.Show($"An error occured:\n\n{e.Message} ({e.GetType().Name})\n\nClick Ok if you want to receive and invitation to a Discord server where you can get help with this problem.", FullName, MessageBoxButtons.OKCancel);
-                        if (result == DialogResult.OK) Process.Start(DiscordUrl);
+                        if (result == DialogResult.OK) Process.Start(new ProcessStartInfo(DiscordUrl) { UseShellExecute = true });
                     }
                 }
                 catch (Exception e2)
@@ -490,8 +483,8 @@ namespace StorybrewEditor
                         StackTrace trace = null;
                         try
                         {
-                            trace = new StackTrace(mainThread, true);
-                            action(new Exception(trace.ToString()));
+                            //trace = new StackTrace(mainThread, true);
+                            action(new Exception(trace?.ToString()));
                         }
                         catch (ThreadStateException e)
                         {

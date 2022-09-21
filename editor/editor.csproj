@@ -4,7 +4,7 @@
     <RootNamespace>StorybrewEditor</RootNamespace>
     <AssemblyName>StorybrewEditor</AssemblyName>
     <UseWindowsForms>true</UseWindowsForms>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
     <Version>1.83-coosu.2</Version>
   </PropertyGroup>
@@ -74,10 +74,6 @@
   <ItemGroup>
     <ProjectReference Include="..\brewlib\brewlib.csproj" />
     <ProjectReference Include="..\common\common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
 
 </Project>

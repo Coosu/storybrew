@@ -89,7 +89,7 @@ namespace StorybrewEditor.Scripting
             if (currentVersion < localTargetVersion)
             {
                 currentVersion = localTargetVersion;
-                scriptProvider = LoadScript();
+                scriptProvider = LoadScript(); // Here update to a new instance
             }
             return scriptProvider.CreateScript();
         }

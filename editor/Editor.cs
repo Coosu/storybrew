@@ -12,6 +12,9 @@ using BrewLib.UserInterface.Skinning;
 using BrewLib.Util;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using StorybrewEditor.ScreenLayers;
 using System;
 using System.ComponentModel;
@@ -48,7 +51,7 @@ namespace StorybrewEditor
         {
             ResourceContainer = new AssemblyResourceContainer(Assembly.GetEntryAssembly(), $"{nameof(StorybrewEditor)}.Resources", "resources");
 
-            DrawState.Initialize(ResourceContainer, Window.Width, Window.Height);
+            DrawState.Initialize(ResourceContainer, Window.Size.X, Window.Size.Y);
             drawContext = new DrawContext();
             drawContext.Register(this, false);
             drawContext.Register<TextureContainer>(new TextureContainerAtlas(ResourceContainer), true);
@@ -171,7 +174,7 @@ namespace StorybrewEditor
                 if (!InputManager.AltOnly)
                     return false;
 
-                volumeSlider.Value += e.DeltaPrecise * 0.05f;
+                volumeSlider.Value += e.OffsetY * 0.05f;
                 return true;
             };
         }
@@ -247,16 +250,16 @@ namespace StorybrewEditor
                 spriteRenderer.RenderedQuadCount / 1000, spriteRenderer.FlushedBufferCount / 1000f, spriteRenderer.DiscardedBufferCount, spriteRenderer.BufferWaitCount, spriteRenderer.LargestBatch);
         }
 
-        private void window_Resize(object sender, EventArgs e)
+        private void window_Resize(ResizeEventArgs e)
             => resizeToWindow();
 
-        private void window_Closing(object sender, CancelEventArgs e)
+        private void window_Closing(CancelEventArgs e)
             => e.Cancel = ScreenLayerManager.Close();
 
         private void resizeToWindow()
         {
-            var width = Window.Width;
-            var height = Window.Height;
+            var width = Window.Size.X;
+            var height = Window.Size.Y;
             if (width == 0 || height == 0) return;
 
             DrawState.Viewport = new Rectangle(0, 0, width, height);

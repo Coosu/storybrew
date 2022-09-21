@@ -4,6 +4,9 @@ using BrewLib.UserInterface;
 using BrewLib.Util;
 using OpenTK;
 using OpenTK.Input;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using StorybrewCommon.Mapset;
 using StorybrewEditor.Storyboarding;
 using StorybrewEditor.UserInterface;
@@ -397,7 +400,7 @@ namespace StorybrewEditor.ScreenLayers
         {
             switch (e.Key)
             {
-                case Key.Right:
+                case Keys.Right:
                     if (e.Control)
                     {
                         var nextBookmark = project.MainBeatmap.Bookmarks.FirstOrDefault(bookmark => bookmark > Math.Round(timeline.Value * 1000) + 50);
@@ -405,7 +408,7 @@ namespace StorybrewEditor.ScreenLayers
                     }
                     else timeline.Scroll(e.Shift ? 4 : 1);
                     return true;
-                case Key.Left:
+                case Keys.Left:
                     if (e.Control)
                     {
                         var prevBookmark = project.MainBeatmap.Bookmarks.LastOrDefault(bookmark => bookmark < Math.Round(timeline.Value * 1000) - 500);
@@ -419,20 +422,20 @@ namespace StorybrewEditor.ScreenLayers
             {
                 switch (e.Key)
                 {
-                    case Key.Space:
+                    case Keys.Space:
                         playPauseButton.Click();
                         return true;
-                    case Key.O:
+                    case Keys.O:
                         withSavePrompt(() => Manager.ShowOpenProject());
                         return true;
-                    case Key.S:
+                    case Keys.S:
                         if (e.Control)
                         {
                             saveProject();
                             return true;
                         }
                         break;
-                    case Key.C:
+                    case Keys.C:
                         if (e.Control)
                         {
                             if (e.Shift)
@@ -462,7 +465,7 @@ namespace StorybrewEditor.ScreenLayers
         public override bool OnMouseWheel(MouseWheelEventArgs e)
         {
             var inputManager = Manager.GetContext<Editor>().InputManager;
-            timeline.Scroll(-e.DeltaPrecise * (inputManager.Shift ? 4 : 1));
+            timeline.Scroll(-e.OffsetY * (inputManager.Shift ? 4 : 1));
             return true;
         }
 

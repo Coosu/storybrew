@@ -1,5 +1,6 @@
 ﻿#if DEBUG
 using OpenTK;
+using OpenTK.Mathematics;
 using StorybrewCommon.Storyboarding.CommandValues;
 
 namespace StorybrewCommon.Storyboarding3d

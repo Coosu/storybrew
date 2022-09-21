@@ -1,5 +1,6 @@
 ﻿#if DEBUG
 using OpenTK;
+using OpenTK.Mathematics;
 using StorybrewCommon.Mapset;
 using System;
 
@@ -33,7 +34,7 @@ namespace StorybrewCommon.Storyboarding3d
             var scale = new Vector2(OsuHitObject.StoryboardSize.Y * (float)AspectRatio, OsuHitObject.StoryboardSize.Y);
             var offset = (scale.X - OsuHitObject.StoryboardSize.X) * 0.5f;
 
-            var transformedPoint = Vector4.Transform(new Vector4(point, 1), transform);
+            var transformedPoint = new Vector4(point, 1) * transform;
             var ndc = new Vector2(transformedPoint.X, transformedPoint.Y) / Math.Abs(transformedPoint.W);
 
             var screenPosition = (ndc + Vector2.One) * 0.5f * scale;

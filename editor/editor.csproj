@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <RootNamespace>StorybrewEditor</RootNamespace>
@@ -23,6 +23,7 @@
     <Authors>storybrew editor</Authors>
     <Product>storybrew editor</Product>
     <Description>Copyright © Damnae 2016</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using BrewLib.Util;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Mathematics;
 using StorybrewCommon.Util;
 using System;
 using System.Drawing;

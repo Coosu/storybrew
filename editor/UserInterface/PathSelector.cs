@@ -2,6 +2,7 @@
 using BrewLib.UserInterface.Skinning.Styles;
 using BrewLib.Util;
 using OpenTK;
+using OpenTK.Mathematics;
 using StorybrewEditor.ScreenLayers;
 using StorybrewEditor.UserInterface.Skinning.Styles;
 using System;

@@ -1,6 +1,7 @@
 ﻿
 #if DEBUG
 using OpenTK;
+using OpenTK.Mathematics;
 using StorybrewCommon.Animations;
 using StorybrewCommon.Mapset;
 using StorybrewCommon.Scripting;

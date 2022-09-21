@@ -8,6 +8,8 @@ using System.Drawing;
 using BrewLib.Util;
 using BrewLib.UserInterface;
 using BrewLib.UserInterface.Skinning.Styles;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 
 namespace StorybrewEditor.UserInterface
 {
@@ -128,10 +130,10 @@ namespace StorybrewEditor.UserInterface
             });
             updateWidgets();
 
-            hueSlider.OnValueChanged += slider_OnValueChanged;
-            saturationSlider.OnValueChanged += slider_OnValueChanged;
-            brightnessSlider.OnValueChanged += slider_OnValueChanged;
-            alphaSlider.OnValueChanged += slider_OnValueChanged;
+            hueSlider.OnValueChanged += (_, __) => slider_OnValueChanged(default, default);
+            saturationSlider.OnValueChanged += (_, __) => slider_OnValueChanged(default, default);
+            brightnessSlider.OnValueChanged += (_, __) => slider_OnValueChanged(default, default);
+            alphaSlider.OnValueChanged += (_, __) => slider_OnValueChanged(default, default);
 
             hueSlider.OnValueCommited += slider_OnValueCommited;
             saturationSlider.OnValueCommited += slider_OnValueCommited;
@@ -140,10 +142,10 @@ namespace StorybrewEditor.UserInterface
             htmlTextbox.OnValueCommited += htmlTextbox_OnValueCommited;
         }
 
-        private void slider_OnValueChanged(object sender, EventArgs e)
+        private void slider_OnValueChanged(object sender, MouseButtonEventArgs e)
             => Value = Color4.FromHsv(new Vector4(hueSlider.Value % 1f, saturationSlider.Value, brightnessSlider.Value, alphaSlider.Value));
 
-        private void slider_OnValueCommited(object sender, EventArgs e)
+        private void slider_OnValueCommited(object sender, MouseButtonEventArgs e)
             => OnValueCommited?.Invoke(this, EventArgs.Empty);
 
         private void htmlTextbox_OnValueCommited(object sender, EventArgs e)

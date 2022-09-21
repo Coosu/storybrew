@@ -5,6 +5,7 @@ using BrewLib.Graphics.Drawables;
 using StorybrewEditor.Storyboarding;
 using BrewLib.Graphics.Renderers;
 using OpenTK.Graphics;
+using OpenTK.Mathematics;
 
 namespace StorybrewEditor.UserInterface.Drawables
 {

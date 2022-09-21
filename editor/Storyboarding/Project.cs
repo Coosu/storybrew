@@ -626,7 +626,7 @@ namespace StorybrewEditor.Storyboarding
 
             var gitIgnorePath = Path.Combine(projectDirectory, ".gitignore");
             if (!File.Exists(gitIgnorePath))
-                File.WriteAllText(gitIgnorePath, ".sbrew/user.yaml\n.sbrew.tmp\n.sbrew.bak\n.cache\n.vs");
+                File.WriteAllText(gitIgnorePath, ".sbrew/user.yaml\n.sbrew.tmp\n.sbrew.bak\n.cache\n.vs\n[Oo]bj/\n[Bb]in/");
 
             var targetDirectory = Path.Combine(projectDirectory, DataFolder);
             using (var directoryWriter = new SafeDirectoryWriter(targetDirectory))

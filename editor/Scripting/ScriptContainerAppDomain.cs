@@ -27,41 +27,43 @@ namespace StorybrewEditor.Scripting
                 var assemblyPath = Path.Combine(CompiledScriptsPath, $"{Guid.NewGuid().ToString()}.dll");
                 ScriptCompiler.Compile(SourcePaths, assemblyPath, ReferencedAssemblies);
 
-                var setup = new AppDomainSetup()
-                {
-                    ApplicationName = $"{Name} {Id}",
-                    ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                    DisallowCodeDownload = true,
-                    DisallowPublisherPolicy = true,
-                    DisallowBindingRedirects = true,
-                };
+                //var setup = new AppDomainSetup()
+                //{
+                //    ApplicationName = $"{Name} {Id}",
+                //    ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+                //    DisallowCodeDownload = true,
+                //    DisallowPublisherPolicy = true,
+                //    DisallowBindingRedirects = true,
+                //};
 
-                var permissions = new PermissionSet(PermissionState.Unrestricted);
+                //var permissions = new PermissionSet(PermissionState.Unrestricted);
 
-                Debug.Print($"{nameof(Scripting)}: Loading domain {setup.ApplicationName}");
-                var scriptDomain = AppDomain.CreateDomain(setup.ApplicationName, null, setup, permissions);
+                //Debug.Print($"{nameof(Scripting)}: Loading domain {setup.ApplicationName}");
+                //var scriptDomain = AppDomain.CreateDomain(setup.ApplicationName, null, setup, permissions);
 
                 ScriptProvider<TScript> scriptProvider;
-                try
-                {
-                    var scriptProviderHandle = Activator.CreateInstanceFrom(scriptDomain,
-                        typeof(ScriptProvider<TScript>).Assembly.ManifestModule.FullyQualifiedName,
-                        typeof(ScriptProvider<TScript>).FullName);
-                    scriptProvider = (ScriptProvider<TScript>)scriptProviderHandle.Unwrap();
-                    scriptProvider.Initialize(assemblyPath, ScriptTypeName);
-                }
-                catch
-                {
-                    AppDomain.Unload(scriptDomain);
-                    throw;
-                }
+                scriptProvider = new ScriptProvider<TScript>();
+                scriptProvider.Initialize(assemblyPath, ScriptTypeName);
+                //try
+                //{
+                //    var scriptProviderHandle = Activator.CreateInstanceFrom(scriptDomain,
+                //        typeof(ScriptProvider<TScript>).Assembly.ManifestModule.FullyQualifiedName,
+                //        typeof(ScriptProvider<TScript>).FullName);
+                //    scriptProvider = (ScriptProvider<TScript>)scriptProviderHandle.Unwrap();
+                //    scriptProvider.Initialize(assemblyPath, ScriptTypeName);
+                //}
+                //catch
+                //{
+                //    AppDomain.Unload(scriptDomain);
+                //    throw;
+                //}
 
-                if (appDomain != null)
-                {
-                    Debug.Print($"{nameof(Scripting)}: Unloading domain {appDomain.FriendlyName}");
-                    AppDomain.Unload(appDomain);
-                }
-                appDomain = scriptDomain;
+                //if (appDomain != null)
+                //{
+                //    Debug.Print($"{nameof(Scripting)}: Unloading domain {appDomain.FriendlyName}");
+                //    AppDomain.Unload(appDomain);
+                //}
+                //appDomain = scriptDomain;
 
                 return scriptProvider;
             }

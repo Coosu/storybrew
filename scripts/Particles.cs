@@ -1,5 +1,6 @@
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Mathematics;
 using StorybrewCommon.Mapset;
 using StorybrewCommon.Scripting;
 using StorybrewCommon.Storyboarding;

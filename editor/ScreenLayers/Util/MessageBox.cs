@@ -1,6 +1,8 @@
 ﻿using BrewLib.UserInterface;
 using BrewLib.Util;
 using OpenTK.Input;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 
 namespace StorybrewEditor.ScreenLayers.Util
@@ -101,7 +103,7 @@ namespace StorybrewEditor.ScreenLayers.Util
             {
                 switch (e.Key)
                 {
-                    case Key.C:
+                    case Keys.C:
                         if (e.Control)
                         {
                             ClipboardHelper.SetText(message);

@@ -1,6 +1,7 @@
 ﻿using BrewLib.UserInterface;
 using BrewLib.Util;
 using OpenTK;
+using OpenTK.Mathematics;
 using StorybrewCommon.Storyboarding;
 using StorybrewEditor.Storyboarding;
 using System;

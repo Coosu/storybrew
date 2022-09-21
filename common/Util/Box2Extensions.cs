@@ -1,7 +1,9 @@
 ﻿using OpenTK;
+using OpenTK.Mathematics;
 using System;
+using System.Runtime.CompilerServices;
 
-namespace StorybrewCommon.Util
+namespace BrewLib.Util
 {
     public static class Box2Extensions
     {

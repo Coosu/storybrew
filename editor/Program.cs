@@ -134,7 +134,7 @@ namespace StorybrewEditor
 #if DEBUG
             var contextFlags = ContextFlags.Debug | ContextFlags.Default;
 #else
-            var contextFlags = ContextFlags.Defaulte;
+            var contextFlags = ContextFlags.Default;
 #endif
             var primaryScreenArea = Screen.PrimaryScreen.WorkingArea;
 

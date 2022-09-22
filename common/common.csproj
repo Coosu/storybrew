@@ -6,7 +6,7 @@
     <AssemblyName>StorybrewCommon</AssemblyName>
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <PackageId>storybrew common</PackageId>
+    <PackageId>Storybrew.Common</PackageId>
     <Authors>storybrew common</Authors>
     <Company>storybrew common</Company>
     <Product>storybrew common</Product>

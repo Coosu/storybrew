@@ -6,7 +6,7 @@
     <AssemblyName>StorybrewScripts</AssemblyName>
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <PackageId>storybrew scripts</PackageId>
+    <PackageId>Storybrew.Scripts</PackageId>
     <Authors>storybrew scripts</Authors>
     <Company>storybrew scripts</Company>
     <Product>storybrew scripts</Product>

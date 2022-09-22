@@ -9,9 +9,9 @@
     <Version>1.83-coosu.2</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+  <!--<PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutputType>Exe</OutputType>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <StartupObject>StorybrewEditor.Program</StartupObject>

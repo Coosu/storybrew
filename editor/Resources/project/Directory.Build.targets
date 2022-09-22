@@ -12,5 +12,8 @@
     <Reference Include="Coosu.Shared">
       <HintPath>../../Coosu.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../../Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

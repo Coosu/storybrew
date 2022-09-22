@@ -217,7 +217,7 @@ namespace StorybrewEditor
 
                 if (!window.Exists || window.IsExiting) return;
 
-                window.VSync = focused ? VSyncMode.Off : VSyncMode.On;
+                window.VSync =/* focused ? VSyncMode.Off :*/ VSyncMode.On;
                 if (window.WindowState != WindowState.Minimized)
                 {
                     var tween = Math.Min((currentTime - fixedRateTime) / fixedRateUpdateDuration, 1);

@@ -458,7 +458,16 @@ namespace StorybrewEditor.Storyboarding
             "System.dll",
             "System.Core.dll",
             "System.Drawing.dll",
-            "OpenTK.dll",
+            "OpenTK.Compute.dll",
+            "OpenTK.Compute.dll",
+            "OpenTK.Core.dll",
+            "OpenTK.Graphics.dll",
+            "OpenTK.Input.dll",
+            "OpenTK.Mathematics.dll",
+            "OpenTK.OpenAL.dll",
+            "OpenTK.Windowing.Common.dll",
+            "OpenTK.Windowing.Desktop.dll",
+            "OpenTK.Windowing.GraphicsLibraryFramework.dll",
             Assembly.GetAssembly(typeof(Script)).Location,
         };
         public static IEnumerable<string> DefaultAssemblies => defaultAssemblies;

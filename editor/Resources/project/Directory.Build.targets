@@ -3,5 +3,14 @@
     <Reference Include="Coosu.Storyboard.Storybrew">
       <HintPath>../../Coosu.Storyboard.Storybrew.dll</HintPath>
     </Reference>
+    <Reference Include="Coosu.Storyboard.Extensions">
+      <HintPath>../../Coosu.Storyboard.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Coosu.Storyboard">
+      <HintPath>../../Coosu.Storyboard.dll</HintPath>
+    </Reference>
+    <Reference Include="Coosu.Shared">
+      <HintPath>../../Coosu.Shared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

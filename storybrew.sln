@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "editor", "editor\editor.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "brewlib", "brewlib\brewlib.csproj", "{A4F7CC21-B769-424B-AB59-89E93D781762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coosu.Storyboard.Storybrew", "Coosu.Storyboard.Storybrew\Coosu.Storyboard.Storybrew.csproj", "{08CFF4FC-D163-4393-80A1-2EE48B48CE28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -69,6 +71,18 @@ Global
 		{A4F7CC21-B769-424B-AB59-89E93D781762}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4F7CC21-B769-424B-AB59-89E93D781762}.Release|x86.ActiveCfg = Release|x86
 		{A4F7CC21-B769-424B-AB59-89E93D781762}.Release|x86.Build.0 = Release|x86
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Build|Any CPU.ActiveCfg = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Build|Any CPU.Build.0 = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Build|x86.ActiveCfg = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Build|x86.Build.0 = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Debug|x86.Build.0 = Debug|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Release|x86.ActiveCfg = Release|Any CPU
+		{08CFF4FC-D163-4393-80A1-2EE48B48CE28}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

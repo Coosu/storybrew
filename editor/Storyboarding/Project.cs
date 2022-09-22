@@ -459,7 +459,6 @@ namespace StorybrewEditor.Storyboarding
             "System.Core.dll",
             "System.Drawing.dll",
             "OpenTK.Compute.dll",
-            "OpenTK.Compute.dll",
             "OpenTK.Core.dll",
             "OpenTK.Graphics.dll",
             "OpenTK.Input.dll",
@@ -856,6 +855,9 @@ namespace StorybrewEditor.Storyboarding
                 MapsetPath = mapsetPath,
                 ImportedAssemblies = new[]
                 {
+                    "Coosu.Shared.dll",
+                    "Coosu.Storyboard.dll",
+                    "Coosu.Storyboard.Extensions.dll",
                     "Coosu.Storyboard.Storybrew.dll",
                     "PresentationCore.dll",
                     "PresentationFramework.dll",

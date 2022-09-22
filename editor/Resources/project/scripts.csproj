@@ -28,8 +28,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK.Compute">
+      <HintPath>..\..\OpenTK.Compute.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Core">
+      <HintPath>..\..\OpenTK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Graphics">
+      <HintPath>..\..\OpenTK.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Input">
+      <HintPath>..\..\OpenTK.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Mathematics">
+      <HintPath>..\..\OpenTK.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.OpenAL">
+      <HintPath>..\..\OpenTK.OpenAL.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Windowing.Common">
+      <HintPath>..\..\OpenTK.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Windowing.Desktop">
+      <HintPath>..\..\OpenTK.Windowing.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Windowing.GraphicsLibraryFramework">
+      <HintPath>..\..\OpenTK.Windowing.GraphicsLibraryFramework.dll</HintPath>
     </Reference>
     <Reference Include="StorybrewCommon">
       <HintPath>..\..\StorybrewCommon.dll</HintPath>

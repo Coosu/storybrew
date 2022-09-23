@@ -49,6 +49,8 @@ namespace StorybrewCommon.Mapset
         public override string ToString()
             => $"{(int)StartTime}, {Flags}";
 
+        public string RawLine { get; private set; }
+
         public static OsuHitObject Parse(Beatmap beatmap, string line)
         {
             var values = line.Split(',');
@@ -67,15 +69,18 @@ namespace StorybrewCommon.Mapset
             var customSampleSet = controlPoint.CustomSampleSet;
             var volume = controlPoint.Volume;
 
+            OsuHitObject hitObject = null;
             if (flags.HasFlag(HitObjectFlag.Circle))
-                return OsuCircle.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
+                hitObject = OsuCircle.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
             else if (flags.HasFlag(HitObjectFlag.Slider))
-                return OsuSlider.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
+                hitObject = OsuSlider.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
             else if (flags.HasFlag(HitObjectFlag.Hold))
-                return OsuHold.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
+                hitObject = OsuHold.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
             else if (flags.HasFlag(HitObjectFlag.Spinner))
-                return OsuSpinner.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
-            return null;
+                hitObject = OsuSpinner.Parse(beatmap, values, x, y, startTime, flags, additions, timingPoint, controlPoint, sampleSet, additionsSampleSet, customSampleSet, volume);
+
+            if (hitObject != null) hitObject.RawLine = line;
+            return hitObject;
         }
     }
 

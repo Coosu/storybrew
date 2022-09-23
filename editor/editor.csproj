@@ -9,10 +9,6 @@
     <Version>1.83-coosu.2</Version>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <OutputType>Exe</OutputType>
-  </PropertyGroup>-->
-
   <PropertyGroup>
     <StartupObject>StorybrewEditor.Program</StartupObject>
   </PropertyGroup>
@@ -54,18 +50,6 @@
     <EmbeddedResource Include="Resources\ui-rounded-borders.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Damnae.Tiny">
       <Version>1.2.0</Version>

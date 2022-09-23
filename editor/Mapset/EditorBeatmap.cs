@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using StorybrewEditor.Util;
 
 namespace StorybrewEditor.Mapset
 {
@@ -262,5 +266,115 @@ namespace StorybrewEditor.Mapset
             => path.StartsWith("\"") && path.EndsWith("\"") ? path.Substring(1, path.Length - 2) : path;
 
         #endregion
+
+        public void SaveToStream(Stream stream)
+        {
+            using var binaryWriter = new BinaryWriter(stream, Encoding.UTF8, true);
+            binaryWriter.Write(Path);
+            binaryWriter.Write(audioFilename);
+            binaryWriter.Write(name);
+            binaryWriter.Write(id);
+            binaryWriter.Write(bookmarks.Count);
+            foreach (var bookmark in bookmarks)
+            {
+                binaryWriter.Write(bookmark);
+            }
+
+            binaryWriter.Write(hpDrainRate);
+            binaryWriter.Write(circleSize);
+            binaryWriter.Write(overallDifficulty);
+            binaryWriter.Write(approachRate);
+            binaryWriter.Write(sliderMultiplier);
+            binaryWriter.Write(sliderTickRate);
+
+            binaryWriter.Write(hitObjects.Count);
+            foreach (var osuHitObject in hitObjects)
+            {
+                binaryWriter.Write(osuHitObject.RawLine);
+            }
+
+            binaryWriter.Write(comboColors.Count);
+            foreach (var comboColor in comboColors)
+            {
+                binaryWriter.Write(comboColor.R);
+                binaryWriter.Write(comboColor.G);
+                binaryWriter.Write(comboColor.B);
+                binaryWriter.Write(comboColor.A);
+            }
+
+            binaryWriter.Write(backgroundPath);
+            binaryWriter.Write(breaks.Count);
+            foreach (var osuBreak in breaks)
+            {
+                binaryWriter.Write(osuBreak.StartTime);
+                binaryWriter.Write(osuBreak.EndTime);
+            }
+
+            binaryWriter.Write(controlPoints.Count);
+            foreach (var controlPoint in controlPoints)
+            {
+                binaryWriter.Write(controlPoint.Offset);
+                binaryWriter.Write(controlPoint.beatDurationSV);
+                binaryWriter.Write(controlPoint.BeatPerMeasure);
+                binaryWriter.Write((int)controlPoint.SampleSet);
+                binaryWriter.Write(controlPoint.CustomSampleSet);
+                binaryWriter.Write(controlPoint.Volume);
+                binaryWriter.Write(controlPoint.IsInherited);
+                binaryWriter.Write(controlPoint.IsKiai);
+                binaryWriter.Write(controlPoint.OmitFirstBarLine);
+            }
+        }
+
+        public static EditorBeatmap LoadFromStream(Stream stream)
+        {
+            using var binaryReader = new BinaryReader(stream, Encoding.UTF8, true);
+            var path = binaryReader.ReadString();
+            var editorBeatmap = new EditorBeatmap(path);
+            editorBeatmap.audioFilename = binaryReader.ReadString();
+            editorBeatmap.name = binaryReader.ReadString();
+            editorBeatmap.id = binaryReader.ReadInt64();
+            var bookmarkCount = binaryReader.ReadInt32();
+            editorBeatmap.bookmarks.Capacity = bookmarkCount;
+            for (int i = 0; i < bookmarkCount; i++)
+            {
+                editorBeatmap.bookmarks.Add(binaryReader.ReadInt32());
+            }
+
+            editorBeatmap.hpDrainRate = binaryReader.ReadDouble();
+            editorBeatmap.circleSize = binaryReader.ReadDouble();
+            editorBeatmap.overallDifficulty = binaryReader.ReadDouble();
+            editorBeatmap.approachRate = binaryReader.ReadDouble();
+            editorBeatmap.sliderMultiplier = binaryReader.ReadDouble();
+            editorBeatmap.sliderTickRate = binaryReader.ReadDouble();
+
+            var hitObjectCount = binaryReader.ReadInt32();
+            editorBeatmap.hitObjects.Capacity = hitObjectCount;
+            for (int i = 0; i < hitObjectCount; i++)
+            {
+                editorBeatmap.hitObjects.Add(OsuHitObject.Parse(editorBeatmap, binaryReader.ReadString()));
+            }
+
+            var colorCount = binaryReader.ReadInt32();
+            editorBeatmap.comboColors.Clear();
+            for (int i = 0; i < colorCount; i++)
+            {
+                editorBeatmap.comboColors.Add(binaryReader.ReadTkColor4());
+            }
+
+            editorBeatmap.backgroundPath = binaryReader.ReadString();
+            var breakCount = binaryReader.ReadInt32();
+            for (int i = 0; i < breakCount; i++)
+            {
+                editorBeatmap.breaks.Add(binaryReader.ReadOsuBreak());
+            }
+
+            var controlPointCount = binaryReader.ReadInt32();
+            for (int i = 0; i < controlPointCount; i++)
+            {
+                editorBeatmap.controlPoints.Add(binaryReader.ReadControlPoint());
+            }
+
+            return editorBeatmap;
+        }
     }
 }

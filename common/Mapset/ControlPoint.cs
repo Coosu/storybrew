@@ -17,7 +17,7 @@ namespace StorybrewCommon.Mapset
         public bool IsKiai;
         public bool OmitFirstBarLine;
 
-        private double beatDurationSV = 60000 / 120;
+        public double beatDurationSV = 60000 / 120;
         public double BeatDuration
         {
             get

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Coosu.Shared.IO;
 
 namespace StorybrewEditor.Mapset
 {
@@ -11,8 +12,8 @@ namespace StorybrewEditor.Mapset
         private readonly string path;
         private readonly bool logLoadingExceptions;
 
-        private readonly List<EditorBeatmap> beatmaps = new List<EditorBeatmap>();
-        public IEnumerable<EditorBeatmap> Beatmaps => beatmaps;
+        private readonly Dictionary<EditorBeatmap, string> beatmaps = new();
+        public IEnumerable<EditorBeatmap> Beatmaps => beatmaps.Keys;
         public int BeatmapCount => beatmaps.Count;
 
         public MapsetManager(string path, bool logLoadingExceptions)
@@ -33,11 +34,20 @@ namespace StorybrewEditor.Mapset
         {
             if (!Directory.Exists(path))
                 return;
-
+            var cacheFolder = Path.GetFullPath("cache/mapsets");
+            if (!Directory.Exists(cacheFolder))
+                Directory.CreateDirectory(cacheFolder);
             foreach (var beatmapPath in Directory.GetFiles(path, "*.osu", SearchOption.TopDirectoryOnly))
                 try
                 {
-                    beatmaps.Add(EditorBeatmap.Load(beatmapPath));
+                    var editorBeatmap = EditorBeatmap.Load(beatmapPath);
+                    var identifier = PathUtils.EscapeFileName(Path.GetFileNameWithoutExtension(beatmapPath)) + ".bin";
+                    using (var fileStream = File.Open(Path.Combine(cacheFolder, identifier), FileMode.Create))
+                    {
+                        editorBeatmap.SaveToStream(fileStream);
+                    }
+                    
+                    beatmaps.Add(editorBeatmap, identifier);
                 }
                 catch (Exception e)
                 {

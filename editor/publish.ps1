@@ -1,1 +1,1 @@
-﻿dotnet publish --runtime win-x64 --configuration Release
+﻿dotnet publish --configuration Release --no-self-contained --runtime win-x64
